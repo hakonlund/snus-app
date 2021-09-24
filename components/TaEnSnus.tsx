@@ -39,12 +39,15 @@ const TaEnSnus = () => {
   }
 
   const tidsgrense = snusGrense.timer * 60 * 60 * 1000 + snusGrense.minutter * 60 * 1000 + snusGrense.sekunder * 1000
-  const kanTaEnSnusTil = Date.now() - new Date(sisteSnusTid).getTime() > tidsgrense
+  const kanTaEnSnusTil = tidSidenForrigeSnus() ? Date.now() - new Date(sisteSnusTid).getTime() > tidsgrense : true
 
   return (
     <View>
       <Text style={styles.tidText}>
-        {tidSidenForrigeSnus()} siden forrige snus
+        {tidSidenForrigeSnus() ?
+          `${tidSidenForrigeSnus()} siden forrige snus` :
+          'Du har ikke tatt en snus enda!'
+        }
       </Text>
       <Text style={styles.tidUnderText}>
         Du kan snuse en snus per
