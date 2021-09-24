@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, FlatList, Text, View, TextComponent } from 'react-native';
-import * as SQLite from 'expo-sqlite'
-
-const db = SQLite.openDatabase('snusdb.db')
+import { StyleSheet, Text, View } from 'react-native';
+import { getAlleSisteSnustidspunkt } from '../sql'
 
 const SisteSnusTidspunkt = () => {
   const [sisteSnusTidspunkt, setSisteSnusTidspunkt] = useState([])
 
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql("SELECT Tidspunkt FROM SnusTidspunkt", [],
-        (_, resultset) => {
-          setSisteSnusTidspunkt(resultset.rows._array)
-        })
-    })
+    getAlleSisteSnustidspunkt(setSisteSnusTidspunkt)
   }, [])
 
   const getDagensSnus = () => {

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native';
-import * as SQLite from 'expo-sqlite';
-
-const db = SQLite.openDatabase('snusdb.db');
+import { getSisteSnustidspunkt, insertNySnustidspunkt } from '../sql'
 
 const snusGrense = {
   timer: 0,
@@ -14,23 +12,16 @@ const TaEnSnus = () => {
   const [sisteSnusTid, setSisteSnusTid] = useState('')
 
   useEffect(() => {
-    db.transaction(tx => {
-      tx.executeSql("SELECT Tidspunkt FROM SnusTidspunkt ORDER BY Tidspunkt DESC", [],
-        (_, resultset) => {
-          setSisteSnusTid(resultset.rows._array[0].Tidspunkt)
-        })
-    })
+    getSisteSnustidspunkt(setSisteSnusTid)
   }, [])
 
   const onPressButton = () => {
-    console.log(sisteSnusTid)
     const tid = Date.now()
     const isostring = new Date(tid).toISOString()
+
     setSisteSnusTid(isostring)
 
-    db.transaction(tx => {
-      tx.executeSql("INSERT INTO SnusTidspunkt (Tidspunkt) VALUES (?)", [isostring])
-    })
+    insertNySnustidspunkt(isostring)
   }
 
   const tidSidenForrigeSnus = () => {

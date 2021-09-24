@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 import TaEnSnus from './components/TaEnSnus'
 import SisteSnusTidspunkt from './components/SisteSnusTidspunkt'
+import { initDb } from './sql'
 import * as SQLite from 'expo-sqlite'
-
-const db = SQLite.openDatabase('snusdb.db');
 
 const pages = {
   taEnSnus: 'TaEnSnus',
@@ -14,18 +13,9 @@ const pages = {
 
 export default function App() {
   const [activePage, setActivePage] = useState(pages.taEnSnus)
+
   useEffect(() => {
-    db.transaction((tx) => {
-      tx.executeSql(
-        "CREATE TABLE IF NOT EXISTS SnusTidspunkt (Id integer PRIMARY KEY AUTOINCREMENT, Tidspunkt DateTime)",
-        [], () => { },
-        (_, error) => {
-          console.log(error)
-          return true
-        }
-      )
-      //tx.executeSql("DROP TABLE SnusTidspunkt")
-    })
+    initDb()
   }, [])
 
   return (
